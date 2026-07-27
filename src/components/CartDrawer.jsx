@@ -9,7 +9,7 @@ export default function CartDrawer() {
   return (
     <>
       <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setOpen(false)} />
-      <div className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-bg-alt border-l border-border z-50 flex flex-col">
+      <div className="fixed top-0 right-0 bottom-0 w max-w-sm bg-bg-alt border-l border-border z-50 flex flex-col">
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <span className="text-sm font-semibold text-text">Panier ({count})</span>
           <button onClick={() => setOpen(false)} className="text-text-muted hover:text-text p-1" aria-label="Fermer">
