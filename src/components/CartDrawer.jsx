@@ -34,7 +34,7 @@ export default function CartDrawer() {
                   {item.name}
                 </Link>
                 <p className="text-xs text-text-muted mt-0.5">
-                  {item.quantity} × {Number(item.sale_price).toLocaleString()} MAD
+                  {item.quantity} × {Number(item.sale_price).toLocaleString()} MADd
                 </p>
               </div>
               <button onClick={() => removeItem(item.id)}
