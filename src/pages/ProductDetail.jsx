@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { api } from '../services/api'
+import { useCart } from '../context/CartContext'
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -18,6 +19,8 @@ export default function ProductDetail() {
     })
     return () => { mounted = false }
   }, [id])
+
+  const { addItem } = useCart()
 
   if (loading) return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 text-center text-text-dim text-sm">
@@ -121,7 +124,7 @@ export default function ProductDetail() {
           </div>
 
           <div className="flex flex-wrap gap-3 mt-6">
-            <button className="btn btn-primary">
+            <button onClick={() => addItem(product)} className="btn btn-primary">
               Ajouter au panier
             </button>
             <Link to="/configurator" className="btn btn-outline">

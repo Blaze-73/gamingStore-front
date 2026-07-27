@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import ProductCard from '../components/ProductCard'
+import Pagination from '../components/Pagination'
 import { api } from '../services/api'
 
 const cpuFilters = ['AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra 9']
@@ -15,13 +16,18 @@ export default function PCGamer() {
   const [loading, setLoading] = useState(true)
   const [activeCpu, setActiveCpu] = useState(null)
   const [activePrice, setActivePrice] = useState(null)
+  const [page, setPage] = useState(1)
+  const [lastPage, setLastPage] = useState(1)
 
   useEffect(() => {
-    api.products.list()
-      .then(data => setProducts(data.data || []))
-      .catch(() => {})
-      .finally(() => setLoading(false))
-  }, [])
+    api.products.list({ category: 'pc-gamer', page })
+      .then(data => {
+        setProducts(data.data || [])
+        setLastPage(data.last_page || 1)
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [page])
 
   let filtered = products
   if (activeCpu) filtered = filtered.filter(p => p.cpu?.includes(activeCpu))
@@ -29,6 +35,9 @@ export default function PCGamer() {
     const range = priceRanges[activePrice]
     filtered = filtered.filter(p => p.sale_price >= range.min && p.sale_price <= range.max)
   }
+
+  function setCpu(cpu) { setActiveCpu(cpu); setPage(1) }
+  function setPrice(i) { setActivePrice(i); setPage(1) }
 
   return (
     <div>
@@ -49,12 +58,12 @@ export default function PCGamer() {
           <div>
             <p className="mono text-[10px] font-semibold text-accent uppercase tracking-widest mb-2">Processeur</p>
             <div className="flex flex-wrap gap-1">
-              <button onClick={() => setActiveCpu(null)}
+              <button onClick={() => setCpu(null)}
                 className={`px-2.5 py-1 text-xs font-medium border transition-colors ${!activeCpu ? 'bg-accent text-bg border-accent' : 'border-border text-text-muted hover:border-text-dim'}`}>
                 Tous
               </button>
               {cpuFilters.map(cpu => (
-                <button key={cpu} onClick={() => setActiveCpu(cpu)}
+                <button key={cpu} onClick={() => setCpu(cpu)}
                   className={`px-2.5 py-1 text-xs font-medium border transition-colors ${activeCpu === cpu ? 'bg-accent text-bg border-accent' : 'border-border text-text-muted hover:border-text-dim'}`}>
                   {cpu}
                 </button>
@@ -64,12 +73,12 @@ export default function PCGamer() {
           <div>
             <p className="mono text-[10px] font-semibold text-accent uppercase tracking-widest mb-2">Budget</p>
             <div className="flex flex-wrap gap-1">
-              <button onClick={() => setActivePrice(null)}
+              <button onClick={() => setPrice(null)}
                 className={`px-2.5 py-1 text-xs font-medium border transition-colors ${activePrice === null ? 'bg-accent text-bg border-accent' : 'border-border text-text-muted hover:border-text-dim'}`}>
                 Tous
               </button>
               {priceRanges.map((r, i) => (
-                <button key={r.label} onClick={() => setActivePrice(i)}
+                <button key={r.label} onClick={() => setPrice(i)}
                   className={`px-2.5 py-1 text-xs font-medium border transition-colors ${activePrice === i ? 'bg-accent text-bg border-accent' : 'border-border text-text-muted hover:border-text-dim'}`}>
                   {r.label}
                 </button>
@@ -83,11 +92,14 @@ export default function PCGamer() {
         ) : filtered.length === 0 ? (
           <div className="py-16 text-center text-text-muted text-sm">Aucune configuration trouvée.</div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filtered.map(pc => (
-              <ProductCard key={pc.id} product={pc} />
-            ))}
-          </div>
+          <>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {filtered.map(pc => (
+                <ProductCard key={pc.id} product={pc} />
+              ))}
+            </div>
+            <Pagination currentPage={page} lastPage={lastPage} onPageChange={setPage} />
+          </>
         )}
       </section>
     </div>

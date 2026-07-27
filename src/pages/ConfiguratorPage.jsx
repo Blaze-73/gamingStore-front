@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { api } from '../services/api'
+import { useCart } from '../context/CartContext'
 
 const stepIcons = {
   welcome: '🖥️', cpu: '🧠', motherboard: '📋', gpu: '🎮', ram: '💾',
@@ -37,11 +38,25 @@ export default function ConfiguratorPage() {
     if (step < configuratorSteps.length - 1) setStep(s => s + 1)
   }
 
+  const { addItem } = useCart()
+
   const total = Object.entries(selections).reduce((sum, [key, val]) => {
     if (!val) return sum
     const found = configuratorOptions[key]?.find(o => o.name === val)
     return sum + (found?.price || 0)
   }, 0)
+
+  const handleAddConfigToCart = useCallback(() => {
+    const selected = Object.entries(selections).filter(([, val]) => val)
+    const name = `PC sur mesure — ${selected.map(([, val]) => val).join(', ').slice(0, 60)}...`
+    addItem({
+      id: 'config-' + Date.now(),
+      name,
+      sale_price: total,
+      original_price: total,
+      image: 'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=800&h=600&fit=crop',
+    })
+  }, [selections, total, addItem])
 
   if (loading) {
     return (
@@ -157,7 +172,7 @@ export default function ConfiguratorPage() {
                   <p className="text-3xl font-bold text-accent">
                     {total.toLocaleString()} <span className="text-sm text-text-muted font-normal">MAD</span>
                   </p>
-                  <button className="btn btn-primary mt-5 btn-sm">
+                  <button onClick={handleAddConfigToCart} className="btn btn-primary mt-5 btn-sm">
                     Ajouter au panier
                   </button>
                 </div>

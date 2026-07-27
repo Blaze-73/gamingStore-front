@@ -62,8 +62,9 @@ export default function Footer() {
               Contact
             </h4>
             <div className="space-y-2 text-sm text-text-muted">
-              <p>📞 05 30 24 55 55</p>
-              <p>✉️ contact@snakegaming.ma</p>
+              <Link to="/contact" className="block hover:text-text transition-colors">📞 05 30 24 55 55</Link>
+              <Link to="/contact" className="block hover:text-text transition-colors">✉️ contact@snakegaming.ma</Link>
+              <Link to="/cart" className="block text-accent hover:text-accent-hover transition-colors tag-api inline-block mt-2">Panier</Link>
             </div>
           </div>
         </div>
