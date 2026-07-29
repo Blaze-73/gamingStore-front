@@ -30,7 +30,7 @@ export default function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
             <Link to="/" className="text-lg font-semibold tracking-tight text-text">
-              Snake<span className="text-accent">Gamingg</span>
+              Snake<span className="text-accent">Gaming</span>
             </Link>
             <p className="text-sm text-text-muted mt-3 leading-relaxed max-w-xs">
               PC gamer sur mesure au Maroc. Monté, testé, livré.
