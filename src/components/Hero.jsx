@@ -2,8 +2,25 @@ import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Canvas } from '@react-three/fiber'
 import { Environment, ContactShadows } from '@react-three/drei'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import GamingPC from './canvas/GamingPC'
+
+function ReflectiveFloor() {
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2.2, 0]}>
+      <planeGeometry args={[12, 12]} />
+      <meshPhysicalMaterial
+        color="#080810"
+        metalness={0.95}
+        roughness={0.03}
+        envMapIntensity={0.6}
+        transparent
+        opacity={0.5}
+      />
+    </mesh>
+  )
+}
 
 export default function Hero({ product }) {
   const sectionRef = useRef(null)
@@ -38,7 +55,7 @@ export default function Hero({ product }) {
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.0,
         }}
-        camera={{ position: [3.8, 1.8, 5.5], fov: 38, near: 0.1, far: 20 }}
+        camera={{ position: [6.5, 0.2, 0.5], fov: 36, near: 0.1, far: 20 }}
         style={{
           position: 'absolute',
           inset: 0,
@@ -47,12 +64,16 @@ export default function Hero({ product }) {
         }}
       >
         <GamingPC scrollRef={scrollRef} />
-        <ContactShadows position={[0, -2.5, 0]} opacity={0.35} scale={8} blur={3} far={4} />
+        <ReflectiveFloor />
+        <ContactShadows position={[0, -2.15, 0]} opacity={0.4} scale={6} blur={2.5} far={4} />
         <Environment preset="city" />
-        <ambientLight intensity={0.3} />
-        <spotLight position={[5, 6, 5]} angle={0.3} penumbra={0.5} intensity={2.5} castShadow />
-        <spotLight position={[-4, 4, -3]} angle={0.4} penumbra={0.6} intensity={0.8} color="#4488ff" />
-        <spotLight position={[0, -1, 7]} angle={0.5} penumbra={0.8} intensity={0.5} color="#ff8844" />
+        <ambientLight intensity={0.2} />
+        <spotLight position={[5, 7, 4]} angle={0.25} penumbra={0.4} intensity={2.5} castShadow />
+        <spotLight position={[-3, 4, -2]} angle={0.35} penumbra={0.5} intensity={0.6} color="#4488ff" />
+        <spotLight position={[0, -1, 5]} angle={0.4} penumbra={0.7} intensity={0.5} color="#ff8844" />
+        <EffectComposer>
+          <Bloom luminanceThreshold={0.15} luminanceSmoothing={0.9} intensity={0.4} mipmapBlur />
+        </EffectComposer>
       </Canvas>
 
       <div className="absolute inset-0 z-10 pointer-events-none">
