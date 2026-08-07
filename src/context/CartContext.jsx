@@ -18,7 +18,11 @@ export function CartProvider({ children }) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+    } catch {
+      // storage unavailable (private mode, quota) — cart stays in memory
+    }
   }, [items])
 
   function addItem(product, quantity = 1) {
