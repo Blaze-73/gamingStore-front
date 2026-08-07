@@ -20,7 +20,7 @@ export default function ProductCard({ product, variant = 'default' }) {
       <div className="card card-border group">
         <Link to={`/product/${id}`} className="flex gap-4 p-3">
           <div className="w-24 h-20 flex-shrink-0 bg-bg overflow-hidden border border-border">
-            {image && <img src={image} alt={name} className="w-full h-full object-cover" />}
+            {image && <img src={image} alt={name} loading="lazy" className="w-full h-full object-cover" />}
           </div>
           <div className="min-w-0 flex-1">
             {model && <span className="tag">{model}</span>}
@@ -41,6 +41,7 @@ export default function ProductCard({ product, variant = 'default' }) {
           <img
             src={image}
             alt={name}
+            loading="lazy"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         )}
