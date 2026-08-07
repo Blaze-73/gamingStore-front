@@ -12,6 +12,13 @@ E-commerce site de PC gaming et matériel informatique basé au Maroc. Vente de 
 | Base de données | MySQL |
 | API | REST (Laravel) / Local fallback |
 
+## Prérequis
+
+- **Node.js** 20+ et npm
+- **PHP 8.2+** et Composer (uniquement pour le backend)
+- **MySQL** (uniquement pour le backend)
+
+
 ## Architecture
 
 ```
