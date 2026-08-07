@@ -74,7 +74,7 @@ export default function Home() {
             <span className="ml-auto tag-api">API</span>
           </div>
           {loading ? (
-            <div className="text-center py-12 text-text-dim text-sm">Chargement...</div>
+            <div role="status" aria-live="polite" className="text-center py-12 text-text-dim text-sm">Chargement...</div>
           ) : (
             <>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
