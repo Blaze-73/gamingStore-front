@@ -53,6 +53,7 @@ export default function SearchBar() {
           value={query}
           onChange={e => handleChange(e.target.value)}
           placeholder="Rechercher..."
+          aria-label="Rechercher un produit"
           className="w-40 lg:w-56 px-2 py-2 text-sm text-text bg-transparent outline-none placeholder:text-text-dim"
         />
         {loading && <span className="text-xs text-text-dim mr-3">...</span>}
@@ -77,7 +78,7 @@ export default function SearchBar() {
             >
               {p.image && (
                 <div className="w-10 h-8 flex-shrink-0 bg-bg border border-border overflow-hidden">
-                  <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                  <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" />
                 </div>
               )}
               <div className="min-w-0 flex-1">
