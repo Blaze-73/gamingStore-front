@@ -31,13 +31,14 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Navigation principale">
             {navItems.map((item) => {
               const isActive = location.pathname === item.slug
               return (
                 <Link
                   key={item.slug}
                   to={item.slug}
+                  aria-current={isActive ? 'page' : undefined}
                   className={`px-2.5 py-1.5 text-sm font-medium transition-colors rounded-sm ${
                     isActive
                       ? 'text-accent bg-accent/5'
