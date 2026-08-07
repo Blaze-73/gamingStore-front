@@ -1,15 +1,23 @@
 const API_BASE = '/api'
+const REQUEST_TIMEOUT = 10000
 
 async function request(path, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: { 'Accept': 'application/json', ...options.headers },
-    ...options,
-  })
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ message: res.statusText }))
-    throw new Error(err.message || res.statusText)
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT)
+  try {
+    const res = await fetch(`${API_BASE}${path}`, {
+      headers: { 'Accept': 'application/json', ...options.headers },
+      signal: controller.signal,
+      ...options,
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: res.statusText }))
+      throw new Error(err.message || res.statusText)
+    }
+    return res.json()
+  } finally {
+    clearTimeout(timeout)
   }
-  return res.json()
 }
 
 export const api = {
